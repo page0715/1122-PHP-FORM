@@ -2,7 +2,6 @@
 
 echo $_POST['name'];
 echo "<br>";
-
 if(!empty($_FILES['img']['tmp_name'])){
     echo $_FILES['img']['tmp_name'];
     echo "<br>";
@@ -14,8 +13,10 @@ if(!empty($_FILES['img']['tmp_name'])){
     $tmp=explode(".",$_FILES['img']['name']);
     $subname=".".end($tmp);
     $filename=date("YmdHis").rand(10000,99999).$subname;
-    echo "<br>";
     move_uploaded_file($_FILES['img']['tmp_name'],"../imgs/".$filename);
-} 
+    header("location:../upload.php?img=".$filename);
+}else{
+    header("location:../upload.php?err=上傳失敗");
+}
 
 ?>
