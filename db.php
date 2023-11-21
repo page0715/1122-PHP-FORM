@@ -4,6 +4,9 @@ $dsn="mysql:host=localhost;charset=utf8;dbname=member";
 $pdo=new PDO($dsn,'root','');
 session_start();
 
+dd('p' => 'p');
+
+
 
 function all($table = null, $where = '', $other = '')
 {
@@ -138,6 +141,8 @@ function del($table, $id)
     return $pdo->exec($sql);
 }
 
+
+// 自訂函式 dd($array) 用來顯示陣列裏面的內容
 function dd($array)
 {
     echo "<pre>";
