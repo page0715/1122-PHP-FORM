@@ -32,11 +32,48 @@
             list($width,$height)=getimagesize($source_path);
         break;
     }
-    $dst_path='./imgs/small_'.$_FILES['img']['name'];
-    $dst_width=150;
-    $dst_height=200;
+    echo $type."-";
+    echo $width."-";
+    echo $height."-";
+    $dst_path='./imgs/thumb_'.$_FILES['img']['name'];
+    $dst_width=300;
+    $dst_height=300;
+    $border=20;
+
     $dst_source=imagecreatetruecolor($dst_width,$dst_height);
-    imagecopyresampled($dst_source,$source,0,0,0,0,$dst_width,$dst_height,$width,$height);
+    $white=imagecolorallocate($dst_source,255,255,255);
+    $red=imagecolorallocate($dst_source,255,0,0);
+    $skyblue=imagecolorallocate($dst_source,122 ,204 ,244);
+    imagefill($dst_source,0,0,$skyblue);
+
+    //判斷方向性
+    if($width==$height){
+        //正方形
+        $scale=($dst_width-($border*2))/$width;
+        echo "scale".$scale;
+        $new_width=$width*$scale;
+        $new_height=$height*$scale;
+        $dst_x=$border;
+        $dst_y=$border;
+    }else if($width<$height){
+        //直向
+        $scale=($dst_width-($border*2))/$height;
+        echo 'scale'.$scale;
+        $new_width=$width*$scale;
+        $new_height=$height*$scale;
+        $dst_x=floor(($dst_width-$new_width)/2);
+        $dst_y=$border;
+    }else{
+        //橫向
+        $scale=($dst_width-($border*2))/$width;
+        echo 'scale'.$scale;
+        $new_width=$width*$scale;
+        $new_height=$height*$scale;
+        $dst_x=$border;
+        $dst_y=floor(($dst_width-$new_height)/2);
+    }
+
+    imagecopyresampled($dst_source,$source,$dst_x,$dst_y,0,0,$new_width,$new_height,$width,$height);
     switch($type){
         case 'image/jpeg':
             imagejpeg($dst_source,$dst_path);
